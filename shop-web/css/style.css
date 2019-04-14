@@ -1,0 +1,78 @@
+.synap-center {
+    text-align: center;
+}
+
+.synap-left {
+    float: left;
+    width: 40%;
+}
+
+.synap-right {
+    float: right;
+    width: 60%;
+}
+
+button.synap-button {
+    background-color: #96bc33;
+    height: 50px;
+    width: 250px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.blank-slate {
+    padding: 25px 0 25px 0;
+}
+
+.synap-container {
+    display: flex;
+    justify-content: center;
+}
+
+div[synap-identifier="payment-button"] {
+    background-color: #96bc33;
+}
+
+table {
+    width: 60%;
+    display: inline-table;
+    font-size: 12px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+table tr:nth-child(even) {
+    background-color: #eee;
+}
+
+table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+table th {
+    background-color: #96bc33;
+    color: white;
+}
+
+@media(max-width: 1000px) {
+    .synap-left {
+        float: left;
+        width: 100%;
+    }
+    .synap-right {
+        float: right;
+        width: 100%;
+    }
+    table {
+        width: 70%;
+    }
+}
