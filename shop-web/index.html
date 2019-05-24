@@ -35,12 +35,12 @@
         }
 
         function setAuthentication(transaction) {
-            apiKey = 'b062e7e7-5bb6-4e33-95e5-4e0bf55dc4b1',
+            apiKey = '98230cbf-b814-4300-bb38-8c093bed72f6',
 
             // Inicio
             // La firma se debe generar en el servidor del comercio utilizando la función criptográfica SHA-512
             // La firma permite verificar la integridad de la transacción
-            signatureKey = 'frYsgA0jjswS!VShKl+coK_hwFLBi/j$',
+            signatureKey = 'ibYl^ykGojrIWAGO*u=KaMv-6dOyYR&U',
             signatureBase =  apiKey + transaction.order.identifier + transaction.order.currency.code + transaction.order.amount + signatureKey
             signature = sha512(signatureBase);
             // Fin de firma, que debe generarse en el servidor del comercio
