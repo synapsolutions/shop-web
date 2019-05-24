@@ -41,7 +41,7 @@
             // La firma se debe generar en el servidor del comercio utilizando la función criptográfica SHA-512
             // La firma permite verificar la integridad de la transacción
             signatureKey = 'ibYl^ykGojrIWAGO*u=KaMv-6dOyYR&U',
-            signatureBase =  apiKey + transaction.order.identifier + transaction.order.currency.code + transaction.order.amount + signatureKey
+            signatureBase =  apiKey + transaction.order.number + transaction.order.currency.code + transaction.order.amount + signatureKey
             signature = sha512(signatureBase);
             // Fin de firma, que debe generarse en el servidor del comercio
 
