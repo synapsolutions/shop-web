@@ -7,22 +7,23 @@
     <meta name="mobile-web-app-capable" content="yes">
 
     <title>Shop Web</title>
-    <script src="https://dev.button.pay.synapsolutions.com/sdk.js"></script>
+    <script src="https://button.pay.synapsolutions.com/web/latest/sdk.js"></script>
+    <script src="js/js-sha512.js"></script>
     <link rel="stylesheet" href="css/style.css">
 
     <script>
         function startPayment() {
-            // Seteo de los campos de autenticación de seguridad
-            var authenticator = setAuthentication();
-
             // Seteo de los campos de la transacción
             var transaction = setTransaction();
+
+            // Seteo de los campos de autenticación de seguridad
+            var authenticator = setAuthentication(transaction);
 
             // Manejo de los campos de respuesta
             var form = new Synap.Form({
                 authentication: authenticator,
                 transaction: transaction,
-                environment: 'dev',
+                environment: 'sbx',
                 listeners: {
                     afterPay: function (response) {
                         // Agregue el código según la experiencia de su cliente
@@ -33,14 +34,21 @@
             form.render('#cart-container');
         }
 
-        function setAuthentication() {
+        function setAuthentication(transaction) {
+            apiKey = 'b062e7e7-5bb6-4e33-95e5-4e0bf55dc4b1',
+
+            // Inicio
+            // La firma se debe generar en el servidor del comercio utilizando la función criptográfica SHA-512
+            // La firma permite verificar la integridad de la transacción
+            signatureKey = 'frYsgA0jjswS!VShKl+coK_hwFLBi/j$',
+            signatureBase =  apiKey + transaction.order.identifier + transaction.order.currency.code + transaction.order.amount + signatureKey
+            signature = sha512(signatureBase);
+            // Fin de firma, que debe generarse en el servidor del comercio
+
             var authenticationData = {
                 // Sete de identificador con el APIKey del comercio
-                identifier: '4',
-
-                // La firma se debe generar en el servidor del comercio utilizando la función criptográfica SHA-512
-                // La firma permite verificar la integridad de la transacción
-                signature: 'ABCD'
+                identifier: apiKey,
+                signature: signature,
             }
             return authenticationData;
         }
@@ -53,7 +61,7 @@
             var transaction = {
                 "order": {
                     "number": generateNumberOrder,
-                    "amount": "99.50",
+                    "amount": "1.00",
                     "country": {
                         "code": "PER"
                     },
@@ -62,7 +70,7 @@
                     },
                     "products": [
                         {
-                            "name": "Frigobar"
+                            "name": "Llavero"
                         }
                     ],
                     "customer": {
