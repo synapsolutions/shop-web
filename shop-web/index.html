@@ -13,86 +13,76 @@
 
     <script>
         function startPayment() {
-            // Seteo de los campos de la transacción
-            var transaction = setTransaction();
+            // Seteo de los campos de transacción
+            var transaction = buildTransaction();
 
             // Seteo de los campos de autenticación de seguridad
-            var authenticator = setAuthentication(transaction);
+            var authenticator = buildAuthentication(transaction);
 
             // Manejo de los campos de respuesta
             var form = new Synap.Form({
+                // Seteo del ambiente "sandbox" o "production"
+                environment: 'sandbox',
+
+                // Seteo de autenticación de seguridad y transacción
                 authentication: authenticator,
                 transaction: transaction,
-                environment: 'sbx',
+
+                // Manejo de la respuesta
                 listeners: {
                     afterPay: function (response) {
-                        // Agregue el código según la experiencia de su cliente
+                        // Agregue el código según la experiencia del cliente
                         console.info({ ecommerceCapureResponse: response });
                     }
                 }
             });
+            // Muestre el contenedor con el widget de pago
             form.render('#cart-container');
         }
 
-        function setAuthentication(transaction) {
-            apiKey = '98230cbf-b814-4300-bb38-8c093bed72f6',
-
-            // Inicio
-            // La firma se debe generar en el servidor del comercio utilizando la función criptográfica SHA-512
-            // La firma permite verificar la integridad de la transacción
-            signatureKey = 'ibYl^ykGojrIWAGO*u=KaMv-6dOyYR&U',
-            signatureBase =  apiKey + transaction.order.number + transaction.order.currency.code + transaction.order.amount + signatureKey
-            signature = sha512(signatureBase);
-            // Fin de firma, que debe generarse en el servidor del comercio
-
-            var authenticationData = {
-                // Sete de identificador con el APIKey del comercio
-                identifier: apiKey,
-                signature: signature,
-            }
-            return authenticationData;
-        }
-
-        function setTransaction() {
-            // Genere el número de orden
-            var generateNumberOrder = (new Date()).getTime() + "";
+        function buildTransaction() {
+            // Genere el número de orden, este es solo un ejemplo
+            var number = (new Date()).getTime() + "";
 
             // Seteo de los datos de transacción
             var transaction = {
                 "order": {
-                    "number": generateNumberOrder,
-                    "amount": "1.00",
+                    "number": number,
+                    // Seteo del código de país 
                     "country": {
                         "code": "PER"
                     },
+                    // Seteo del código de moneda
                     "currency": {
                         "code": "PEN"
                     },
-                    "products": [
-                        {
-                            "name": "Llavero"
-                        }
-                    ],
+                    //Seteo del monto
+                    "amount": "1.00",
+                    // Seteo del cliente
                     "customer": {
                         "name": "Javier",
                         "lastName": "Pérez",
+                        // Seteo del pais (country), niveles de ubicación geográfica (levels), dirección (line1 y line2) y código postal (zip)
                         "address": {
                             "country": "PER",
                             "levels": [
-                                "LIMA",
-                                "LIMA",
-                                "SAN ISIDRO"
+                                "150000",
+                                "150100",
+                                "150101"
                             ],
-                            "line1": "Av Carlos Ferreyros 180",
-                            "zip": "051014"
+                            "line1": "Ca Carlos Ferreyros 180",
+                            "zip": "15036"
                         },
+                        // Seteo del email y teléfono
                         "email": "javier.perez@synapsolutions.com",
-                        "phone": "999555666",
+                        "phone": "999888777",
+                        // Seteo del tipo y número de documento
                         "document": {
                             "type": "DNI",
                             "number": "44556677"
                         }
                     },
+                    // Seteo de los datos de envío
                     "shipping": {
                         "name": "Javier",
                         "lastName": "Pérez",
@@ -113,6 +103,7 @@
                             "number": "44556677"
                         }
                     },
+                    // Seteo de los datos de facturación
                     "billing": {
                         "name": "Javier",
                         "lastName": "Pérez",
@@ -132,8 +123,19 @@
                             "type": "DNI",
                             "number": "44556677"
                         }
-                    }
+                    },
+                    // Seteo de los datos de producto
+                    "products": [
+                        {
+                            "code": "123",
+                            "name": "Llavero",
+                            "quantity": "1",
+                            "unitAmount": "1.00",
+                            "amount": "1.00",
+                        }
+                    ],
                 },
+                // Seteo de los datos de configuración
                 "settings": {
                     "brands": ['VISA', 'MSCD', 'AMEX', 'DINC'],
                     "language": "es_PE",
@@ -141,6 +143,37 @@
                 }
             };
             return transaction;
+        }
+
+        function buildAuthentication(transaction) {
+            apiKey = '98230cbf-b814-4300-bb38-8c093bed72f6',
+
+            // La signatureKey y la función de generación de firma debe usarse e implementarse en el servidor del comercio utilizando la función criptográfica SHA-512
+            // solo con propósito de demostrar la funcionalidad, se implementará en el ejemplo
+            // (bajo ninguna circunstancia debe exponerse la signatureKey y la función de firma desde la aplicación porque compromete la seguridad)
+            signatureKey = 'ibYl^ykGojrIWAGO*u=KaMv-6dOyYR&U',
+            signature = generateSignature(transaction, apiKey, signatureKey);
+
+            // Seteo de identificador del comercio (apiKey) y de firma, que permite verificar la integridad de la transacción
+            var authenticator = {
+                identifier: apiKey,
+                signature: signature,
+            }
+
+            return authenticator;
+        }
+
+        // La signatureKey y la función de generación de firma debe usarse e implementarse en el servidor del comercio utilizando la función criptográfica SHA-512
+        // solo con propósito de demostrar la funcionalidad, se implementará en el ejemplo
+        // (bajo ninguna circunstancia debe exponerse la signatureKey y la función de firma desde la aplicación porque compromete la seguridad)
+        function generateSignature(transaction, apiKey, signatureKey) {
+            orderNumber = transaction.order.number;
+            currencyCode = transaction.order.currency.code;
+            amount = transaction.order.amount;
+
+            rawSignature =  apiKey + orderNumber + currencyCode + amount + signatureKey
+            signature = sha512(rawSignature);
+            return signature;
         }
     </script>
 </head>
@@ -158,7 +191,7 @@
                 </div>
                 <div class="blank-slate">
                     <div id="cart-container" class="synap-container">
-                        <!-- Aquí se visualizará el widget de pago -->
+                        <!-- Contenedor donde se apertura el widget de pago -->
                     </div>
                 </div>
             </div>
@@ -166,7 +199,7 @@
 
         <div class="synap-right">
             <div class="synap-center">
-                <p>Presiona el botón "Probar pago por S/1.00” para abrir el widget de pago y realiza un pago de prueba.
+                <p>Presiona el botón "Probar pago por S/1.00” para abrir el widget de pago y realizar un pago de prueba.
                 </p>
                 <p>Puedes usar cualquiera de las siguientes tarjetas de prueba:</p>
                 <br>
