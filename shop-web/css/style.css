@@ -1,15 +1,16 @@
 .synap-center {
     text-align: center;
+    padding: 20px;
 }
 
 .synap-left {
     float: left;
-    width: 40%;
+    width: 50%;
 }
 
 .synap-right {
     float: right;
-    width: 60%;
+    width: 50%;
 }
 
 button.synap-button {
@@ -35,7 +36,7 @@ div[synap-identifier="payment-button"] {
 }
 
 table {
-    width: 60%;
+    width: 90%;
     display: inline-table;
     font-size: 12px;
 }
@@ -73,6 +74,20 @@ table th {
         width: 100%;
     }
     table {
-        width: 70%;
+        width: 80%;
+    }
+}
+
+@media(max-width: 500px) {
+    .synap-left {
+        float: left;
+        width: 100%;
+    }
+    .synap-right {
+        float: right;
+        width: 100%;
+    }
+    table {
+        width: 100%;
     }
 }

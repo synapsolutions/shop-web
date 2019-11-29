@@ -31,8 +31,23 @@
                 // Manejo de la respuesta
                 listeners: {
                     afterPay: function (response) {
-                        // Agregue el código según la experiencia del cliente
-                        console.info({ ecommerceCapureResponse: response });
+                        if (response.success) {
+                            if (response.result.accepted) {
+                                // Agregue el código según la experiencia del cliente para la autorización
+                                console.info({ ecommerceCapureResponse: response });
+                                console.info("AUTHORIZED");
+                            }
+                            else {
+                                // Agregue el código según la experiencia del cliente para la denegación
+                                console.info({ ecommerceCapureResponse: response });
+                                console.info("DENIED");
+                            }
+                        }
+                        else {
+                            // Agregue el código de la experiencia que desee visualizar en un error
+                            console.info({ ecommerceCapureResponse: response });
+                            console.info("ERROR");
+                        }
                     }
                 }
             });
@@ -144,13 +159,13 @@
         }
 
         function buildAuthentication(transaction) {
-            apiKey = '98230cbf-b814-4300-bb38-8c093bed72f6',
+            apiKey = 'ab254a10-ddc2-4d84-8f31-d3fab9d49520',
 
-            // La signatureKey y la función de generación de firma debe usarse e implementarse en el servidor del comercio utilizando la función criptográfica SHA-512
-            // solo con propósito de demostrar la funcionalidad, se implementará en el ejemplo
-            // (bajo ninguna circunstancia debe exponerse la signatureKey y la función de firma desde la aplicación porque compromete la seguridad)
-            signatureKey = 'ibYl^ykGojrIWAGO*u=KaMv-6dOyYR&U',
-            signature = generateSignature(transaction, apiKey, signatureKey);
+                // La signatureKey y la función de generación de firma debe usarse e implementarse en el servidor del comercio utilizando la función criptográfica SHA-512
+                // solo con propósito de demostrar la funcionalidad, se implementará en el ejemplo
+                // (bajo ninguna circunstancia debe exponerse la signatureKey y la función de firma desde la aplicación porque compromete la seguridad)
+                signatureKey = 'eDpehY%YPYgsoludCSZhu*WLdmKBWfAo',
+                signature = generateSignature(transaction, apiKey, signatureKey);
 
             // Seteo de identificador del comercio (apiKey) y de firma, que permite verificar la integridad de la transacción
             var authenticator = {
@@ -169,7 +184,7 @@
             currencyCode = transaction.order.currency.code;
             amount = transaction.order.amount;
 
-            rawSignature =  apiKey + orderNumber + currencyCode + amount + signatureKey
+            rawSignature = apiKey + orderNumber + currencyCode + amount + signatureKey
             signature = sha512(rawSignature);
             return signature;
         }
@@ -185,7 +200,7 @@
         <div class="synap-left">
             <div>
                 <div class="synap-center">
-                    <button class="synap-button" onclick="javascript:startPayment();">Probar pago por S/1.00</button>
+                    <button class="synap-button" onclick="javascript:startPayment();">Probar pago por S/ 1.00</button>
                 </div>
                 <div class="blank-slate">
                     <div id="cart-container" class="synap-container">
@@ -205,22 +220,32 @@
                     <tr>
                         <th>Marca</th>
                         <th>Número de tarjeta</th>
+                        <th>Vence</th>
+                        <th>CVV2</th>
                     </tr>
                     <tr>
                         <td> Visa </td>
                         <td> 4242 4242 4242 4242 </td>
+                        <td> 12/24 </td>
+                        <td> 123 </td>
                     </tr>
                     <tr>
                         <td> Mastercard </td>
                         <td> 5555 5555 5555 4444 </td>
+                        <td> 12/24 </td>
+                        <td> 123 </td>
                     </tr>
                     <tr>
                         <td> American Express </td>
                         <td> 3782 822463 10005 </td>
+                        <td> 12/24 </td>
+                        <td> 123 </td>
                     </tr>
                     <tr>
                         <td> Diners </td>
-                        <td> 3056 9309 0259 04 </td>
+                        <td> 3654 8485 6815 51 </td>
+                        <td> 12/24 </td>
+                        <td> 123 </td>
                     </tr>
                 </table>
             </div>
