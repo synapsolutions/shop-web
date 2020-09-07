@@ -159,18 +159,27 @@
         }
 
         function buildAuthentication(transaction) {
-            apiKey = 'ab254a10-ddc2-4d84-8f31-d3fab9d49520',
+            apiKey = 'ab254a10-ddc2-4d84-8f31-d3fab9d49520';
 
-                // La signatureKey y la función de generación de firma debe usarse e implementarse en el servidor del comercio utilizando la función criptográfica SHA-512
-                // solo con propósito de demostrar la funcionalidad, se implementará en el ejemplo
-                // (bajo ninguna circunstancia debe exponerse la signatureKey y la función de firma desde la aplicación porque compromete la seguridad)
-                signatureKey = 'eDpehY%YPYgsoludCSZhu*WLdmKBWfAo',
-                signature = generateSignature(transaction, apiKey, signatureKey);
+            // La signatureKey y la función de generación de firma debe usarse e implementarse en el servidor del comercio utilizando la función criptográfica SHA-512
+            // solo con propósito de demostrar la funcionalidad, se implementará en el ejemplo
+            // (bajo ninguna circunstancia debe exponerse la signatureKey y la función de firma desde la aplicación porque compromete la seguridad)
+            signatureKey = 'eDpehY%YPYgsoludCSZhu*WLdmKBWfAo';
+            
+            signature = generateSignature(transaction, apiKey, signatureKey);
 
-            // Seteo de identificador del comercio (apiKey) y de firma, que permite verificar la integridad de la transacción
+            // El campo onBehalf es opcional y se usa cuando un comercio agrupa otros sub comercios
+            // la conexión con cada sub comercio se realiza con las credenciales del comercio agrupador
+            // y enviando el identificador del sub comercio en el campo onBehalf
+            //onBehalf = 'cf747220-b471-4439-9130-d086d4ca83d4';
+
+            // Seteo de identificador del comercio (apiKey)
+            // Seteo de firma, que permite verificar la integridad de la transacción
+            // Seteo de onBehalf, que permite identificar las transacciones de los subcomercios
             var authenticator = {
                 identifier: apiKey,
                 signature: signature,
+                //onBehalf: onBehalf
             }
 
             return authenticator;
